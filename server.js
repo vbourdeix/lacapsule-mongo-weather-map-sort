@@ -23,22 +23,24 @@ app.get('/add', function (req, res) {
     body = JSON.parse(body);
     
     console.log(req.query);
-    req.query.city     = body.name;
-    req.query.temp_min = body.main.temp_min;
-    req.query.temp_max = body.main.temp_max;
-    req.query.picto    = body.weather[0].icon;
-    req.query.description = body.weather[0].description;
-    console.log(body.main.temp_min+'//'+body.main.temp_max+'//'+body.weather[0].description);
-    console.log(req.query);
-    
-    cityList.push(req.query);
-  
+    if(body.main.temp_min != undefined) {
+      req.query.city     = body.name;
+      req.query.temp_min = body.main.temp_min;
+      req.query.temp_max = body.main.temp_max;
+      req.query.picto    = body.weather[0].icon;
+      req.query.description = body.weather[0].description;
+      console.log(body.main.temp_min+'//'+body.main.temp_max+'//'+body.weather[0].description);
+      console.log(req.query);
+      
+      cityList.push(req.query);
+    }
     res.render('meteo', {
       list : cityList
     });
   
   });
 
+ 
  
 });
 

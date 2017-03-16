@@ -4,6 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Made with Thimble</title>
+  <script
+  src="https://code.jquery.com/jquery-3.1.1.min.js"
+  integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+  crossorigin="anonymous"></script>
+  
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
@@ -13,6 +18,7 @@
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="style.css">
+  <script src="script.js"></script>
 </head>
 <body>
 
@@ -24,9 +30,14 @@
             <label for="city">Ville</label>
             <input type="text" class="form-control" id="city" name="city" placeholder="Lyon, Paris ...">
           </div> 
-          <button type="submit" class="btn btn-warning">Enregistrer</button>
+          <button type="submit" id="add-city" class="btn btn-warning">Enregistrer</button>
         </form>
+        
+        <div class="alert alert-danger" role="alert"></div>
       </div>
+      
+     
+      
     </div>
   </div>
   
@@ -37,7 +48,7 @@
           <%
           for(var i=0; i<list.length; i++){
           %>
-            <li class="list-group-item"><span class="city"><%= list[i].city%></span> <img src="http://openweathermap.org/img/w/<%= list[i].picto %>.png"> <span class="desc"><%= list[i].description%></span> <span class="label label-warning"><%= list[i].temp_max%>°C</span> <span class="label label-default"><%= list[i].temp_min%> °C</span> <a href="./delete?indice=<%= i %>"><span class="glyphicon glyphicon-remove-circle"></span></a></li>
+            <li class="list-group-item"><span class="city"><%= list[i].city%></span> <img src="http://openweathermap.org/img/w/<%= list[i].picto %>.png"> <span class="desc"><%= list[i].description%></span> <span class="label label-warning"><%= list[i].temp_max%>°C</span> <span class="label label-default"><%= list[i].temp_min%> °C</span> <a class="delete" href="./delete?indice=<%= i %>"><span class="glyphicon glyphicon-remove-circle"></span></a></li>
           <%
           }
           %>
