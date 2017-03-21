@@ -45,43 +45,49 @@ app.get('/', function (req, res) {
 
 app.get('/add', function (req, res) {
   
-  request("http://api.openweathermap.org/data/2.5/weather?q="+req.query.city+"&APPID=9b754f1f40051783e4f72c176953866e&units=metric&lang=fr", function(error, response, body) {
-  
-    body = JSON.parse(body);
-    
-    console.log(req.query);
-    if(body.main.temp_min != undefined) {  
-
-      // Initialisation de la propriété "sortOrder" à 0
-      var newCitySortOrder = 0;
-      //Si au moins 1 element dans le tableau, recuperer la propriété "sortOrder" du dernier élément et lui ajouter +1
-      if(cityList.length > 0) {
-         newCitySortOrder = cityList[cityList.length-1].sortOrder + 1;
-      }
-
-      var city = new CityModel({
-        city:        body.name,
-        temp_max:    body.main.temp_max,
-        temp_min:    body.main.temp_min,
-        description: body.weather[0].description,
-        picto:       body.weather[0].icon,
-        sortOrder:   newCitySortOrder,
-        lat:         body.coord.lat,
-        lon:         body.coord.lon
-
-      });
-
-      city.save(function (err, city) {
-        if (err) return console.error(err);
-        cityList.push(city);
-        res.redirect('/');
-      });
+  var cityAlreadyExists = false;
+  CityModel.find({city: req.query.city}, function(err, citiesFound){
+    if (citiesFound.length) {
+      cityAlreadyExists = true;
     }
-  
-  });
 
- 
- 
+    if (!cityAlreadyExists) {
+      var requestUrl = "http://api.openweathermap.org/data/2.5/weather?q="+req.query.city+"&APPID=9b754f1f40051783e4f72c176953866e&units=metric&lang=fr";
+      request(requestUrl, function(error, response, body) {
+        body = JSON.parse(body);      
+        if(body.main.temp_min != undefined) {  
+
+          // Initialisation de la propriété "sortOrder" à 0
+          var newCitySortOrder = 0;
+          //Si au moins 1 element dans le tableau, recuperer la propriété "sortOrder" du dernier élément et lui ajouter +1
+          if(cityList.length > 0) {
+             newCitySortOrder = cityList[cityList.length-1].sortOrder + 1;
+          }
+
+          var city = new CityModel({
+            city:        body.name,
+            temp_max:    body.main.temp_max,
+            temp_min:    body.main.temp_min,
+            description: body.weather[0].description,
+            picto:       body.weather[0].icon,
+            sortOrder:   newCitySortOrder,
+            lat:         body.coord.lat,
+            lon:         body.coord.lon
+
+          });
+
+          city.save(function (err, city) {
+            if (err) return console.error(err);
+            cityList.push(city);
+            res.redirect('/');
+          });
+        }
+      });
+    } else {
+      res.redirect('/');
+    }
+  });
+  
 });
 
 
