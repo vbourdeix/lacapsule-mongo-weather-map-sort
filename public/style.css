@@ -22,3 +22,7 @@ body {
 .alert-danger{
  display : none;
 }
+
+#mapid {
+  height: 150px;
+}
